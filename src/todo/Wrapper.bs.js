@@ -3,9 +3,16 @@
 
 var React = require("react");
 var Navbar$ReactHooksTemplate = require("../Navbar.bs.js");
+var TodoPrivateWrapper$ReactHooksTemplate = require("./TodoPrivateWrapper.bs.js");
 
 function Wrapper(Props) {
-  return React.createElement("div", undefined, React.createElement(Navbar$ReactHooksTemplate.make, { }), React.createElement("div", undefined, "Hello world"));
+  return React.createElement("div", undefined, React.createElement(Navbar$ReactHooksTemplate.make, { }), React.createElement("div", {
+                  className: "container-fluid p-left-right-0"
+                }, React.createElement("div", {
+                      className: "col-xs-12 col-md-9 p-left-right-0"
+                    }, React.createElement("div", {
+                          className: "col-xs-12 col-md-6 sliderMenu p-30"
+                        }, React.createElement(TodoPrivateWrapper$ReactHooksTemplate.make, { })))));
 }
 
 var make = Wrapper;
