@@ -7,10 +7,10 @@ let make = () => {
   switch (url.path) {
 
     /* Route for Todo App */
-    | [] => <div>{ReasonReact.string("Root")}</div>
+    | [] => <Wrapper />
 
     /* Route for Auth */
-    | ["login"] => <div>{ReasonReact.string("Login")}</div>
+    | ["login"] => <Login />
 
     /* Redirect to root */
     | _ => {

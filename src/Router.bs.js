@@ -3,6 +3,8 @@
 
 var React = require("react");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.js");
+var Login$ReactHooksTemplate = require("./auth/Login.bs.js");
+var Wrapper$ReactHooksTemplate = require("./todo/Wrapper.bs.js");
 
 function Router(Props) {
   var url = ReasonReactRouter.useUrl(undefined, /* () */0);
@@ -10,12 +12,12 @@ function Router(Props) {
   var exit = 0;
   if (match) {
     if (match[0] === "login" && !match[1]) {
-      return React.createElement("div", undefined, "Login");
+      return React.createElement(Login$ReactHooksTemplate.make, { });
     } else {
       exit = 1;
     }
   } else {
-    return React.createElement("div", undefined, "Root");
+    return React.createElement(Wrapper$ReactHooksTemplate.make, { });
   }
   if (exit === 1) {
     ReasonReactRouter.push("/");
