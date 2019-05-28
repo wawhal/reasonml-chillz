@@ -2,10 +2,10 @@
 let make = () => {
   <div className="todoWrapper">
     <div className="sectionHeader">
-      {ReasonReact.string("Personal todos")}
+      {ReasonReact.string("Public feed (realtime)")}
     </div>
-    <TodoInput isPublic=false />
-    <TodoPrivateList />
+    <TodoInput isPublic=true/>
+    <TodoPublicList />
   </div>
 }
 

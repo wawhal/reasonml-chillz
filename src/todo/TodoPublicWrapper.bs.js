@@ -3,19 +3,19 @@
 
 var React = require("react");
 var TodoInput$ReactHooksTemplate = require("./TodoInput.bs.js");
-var TodoPrivateList$ReactHooksTemplate = require("./TodoPrivateList.bs.js");
+var TodoPublicList$ReactHooksTemplate = require("./TodoPublicList.bs.js");
 
-function TodoPrivateWrapper(Props) {
+function TodoPublicWrapper(Props) {
   return React.createElement("div", {
               className: "todoWrapper"
             }, React.createElement("div", {
                   className: "sectionHeader"
-                }, "Personal todos"), React.createElement(TodoInput$ReactHooksTemplate.make, {
-                  isPublic: false
-                }), React.createElement(TodoPrivateList$ReactHooksTemplate.make, { }));
+                }, "Public feed (realtime)"), React.createElement(TodoInput$ReactHooksTemplate.make, {
+                  isPublic: true
+                }), React.createElement(TodoPublicList$ReactHooksTemplate.make, { }));
 }
 
-var make = TodoPrivateWrapper;
+var make = TodoPublicWrapper;
 
 exports.make = make;
 /* react Not a pure module */

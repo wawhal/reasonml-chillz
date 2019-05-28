@@ -7,7 +7,7 @@ let make = () => {
   switch (url.path) {
 
     /* Route for Todo App */
-    | [] => <Wrapper />
+    | [] => <App />
 
     /* Route for Auth */
     | ["login"] => <Login />
@@ -15,7 +15,7 @@ let make = () => {
     /* Redirect to root */
     | _ => {
       ReasonReactRouter.push("/");
-      <div>{ReasonReact.string("Root")}</div>
+      <div>{ReasonReact.string("Please wait...")}</div>
     }
   }
 }

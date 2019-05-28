@@ -5,13 +5,15 @@ let sampleTodos : list(todo) = [
     id: 1,
     title: "This is private todo 1",
     is_completed: true,
-    is_public: false
+    is_public: false,
+    user: None,
   },
   {
     id: 2,
     title: "This is private todo 2",
     is_completed: false,
-    is_public: false
+    is_public: false,
+    user: None
   }
 ];
 

@@ -3,8 +3,8 @@
 
 var React = require("react");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.js");
+var App$ReactHooksTemplate = require("./App.bs.js");
 var Login$ReactHooksTemplate = require("./auth/Login.bs.js");
-var Wrapper$ReactHooksTemplate = require("./todo/Wrapper.bs.js");
 
 function Router(Props) {
   var url = ReasonReactRouter.useUrl(undefined, /* () */0);
@@ -17,11 +17,11 @@ function Router(Props) {
       exit = 1;
     }
   } else {
-    return React.createElement(Wrapper$ReactHooksTemplate.make, { });
+    return React.createElement(App$ReactHooksTemplate.make, { });
   }
   if (exit === 1) {
     ReasonReactRouter.push("/");
-    return React.createElement("div", undefined, "Root");
+    return React.createElement("div", undefined, "Please wait...");
   }
   
 }

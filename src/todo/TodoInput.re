@@ -1,6 +1,6 @@
 [@react.component]
 
-let make = () => {
+let make = (~isPublic: bool) => {
   <form className="formInput">
     <input
       className="input"
