@@ -8,6 +8,7 @@ var OnlineUsersWrapper$ReactHooksTemplate = require("./online-users/OnlineUsersW
 var TodoPrivateWrapper$ReactHooksTemplate = require("./todo/TodoPrivateWrapper.bs.js");
 
 function App(Props) {
+  Props.token;
   return React.createElement("div", undefined, React.createElement(Navbar$ReactHooksTemplate.make, { }), React.createElement("div", {
                   className: "container-fluid p-left-right-0"
                 }, React.createElement("div", {

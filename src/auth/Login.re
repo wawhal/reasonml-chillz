@@ -1,3 +1,15 @@
+open Auth0
+
+let authOptions = {
+  "domain": "graphql-tutorials.auth0.com",
+  "clientID": "P38qnFo1lFAQJrzkun--wEzqljVNGcWW",
+  "redirectUri": "http://localhost:3000/callback",
+  "responseType": "token id_token",
+  "scope": "openid"
+};
+
+let authClient = Auth0.createClient(authOptions);
+
 [@react.component]
 let make = () => {
   <div className="overlay">
@@ -12,6 +24,11 @@ let make = () => {
         <button
           id="qsLoginBtn"
           className="btn-primary btn-margin btn loginBtn"
+          onClick={
+            event => {
+              authClient##authorize();
+            }
+          }
         >
           {ReasonReact.string("Log in")}
         </button>

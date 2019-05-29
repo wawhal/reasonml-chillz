@@ -1,18 +1,18 @@
 [@react.component]
 let make = () => {
 
-  /* Check URL and map path */
+  // Check URL and map path
   let url = ReasonReactRouter.useUrl();
 
   switch (url.path) {
 
-    /* Route for Todo App */
-    | [] => <App />
+    // Route for Todo App
+    | [] | ["login"]=> <AuthHandler />
 
-    /* Route for Auth */
-    | ["login"] => <Login />
+    // Route for auth callback
+    | ["callback"] => <CallbackHandler urlHash={url.hash}/>
 
-    /* Redirect to root */
+    // Redirect to root
     | _ => {
       ReasonReactRouter.push("/");
       <div>{ReasonReact.string("Please wait...")}</div>
