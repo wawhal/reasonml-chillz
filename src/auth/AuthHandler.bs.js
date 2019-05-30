@@ -19,7 +19,7 @@ var authOptions = {
 var authClient = new Auth0Js.WebAuth(authOptions);
 
 function AuthHandler(Props) {
-  var match = React.useReducer((function (state, action) {
+  var match = React.useReducer((function (_state, action) {
           return /* record */[/* token */action[0]];
         }), /* record */[/* token */undefined]);
   var dispatch = match[1];

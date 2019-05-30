@@ -29,7 +29,7 @@ var sampleTodos = /* :: */[
 ];
 
 function TodoPrivateList(Props) {
-  var match = React.useReducer((function (state, action) {
+  var match = React.useReducer((function (_state, action) {
           return /* record */[/* filter */action[0]];
         }), /* record */[/* filter */"all"]);
   var dispatch = match[1];

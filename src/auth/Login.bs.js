@@ -28,7 +28,7 @@ function Login(Props) {
                     }, React.createElement("button", {
                           className: "btn-primary btn-margin btn loginBtn",
                           id: "qsLoginBtn",
-                          onClick: (function ($$event) {
+                          onClick: (function (param) {
                               return authClient.authorize();
                             })
                         }, "Log in"))));

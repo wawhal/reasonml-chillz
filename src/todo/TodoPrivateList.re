@@ -30,7 +30,7 @@ type action =
 let make = () => {
 
   // state and reducer
-  let (state, dispatch) = React.useReducer((state, action) =>
+  let (state, dispatch) = React.useReducer((_state, action) =>
     switch(action) {
       | UpdateFilter(filter) => { filter: filter }
     },

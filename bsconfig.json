@@ -16,7 +16,9 @@
   "namespace": true,
   "bs-dependencies": [
     "reason-react",
-    "bs-react-bootstrap"
+    "reason-apollo",
+    "bs-react-bootstrap",
+    "@glennsl/bs-json"
   ],
   "refmt": 3
 }

@@ -25,7 +25,7 @@ let make = () => {
           id="qsLoginBtn"
           className="btn-primary btn-margin btn loginBtn"
           onClick={
-            event => {
+            _ => {
               authClient##authorize();
             }
           }

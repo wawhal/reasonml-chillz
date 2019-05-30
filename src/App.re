@@ -1,5 +1,6 @@
 [@react.component]
 let make = (~token: string) => {
+  let client = ApolloClient.makeApolloClient(token);
   <div>
     <Navbar />
     <div className="container-fluid p-left-right-0">

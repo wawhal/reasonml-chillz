@@ -1,5 +1,3 @@
-open Auth0
-
 let authOptions = {
   "domain": "graphql-tutorials.auth0.com",
   "clientID": "P38qnFo1lFAQJrzkun--wEzqljVNGcWW",
@@ -19,7 +17,7 @@ type action =
 
 [@react.component]
 let make = () => {
-  let (state, dispatch) = React.useReducer((state, action) =>
+  let (state, dispatch) = React.useReducer((_state, action) =>
   switch(action) {
   | SetToken(token) => { token: token }
   }, { token: None});

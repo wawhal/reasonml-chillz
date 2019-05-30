@@ -3,12 +3,14 @@
 
 var React = require("react");
 var Navbar$ReactHooksTemplate = require("./Navbar.bs.js");
+var ApolloClient$ReactHooksTemplate = require("./ApolloClient.bs.js");
 var TodoPublicWrapper$ReactHooksTemplate = require("./todo/TodoPublicWrapper.bs.js");
 var OnlineUsersWrapper$ReactHooksTemplate = require("./online-users/OnlineUsersWrapper.bs.js");
 var TodoPrivateWrapper$ReactHooksTemplate = require("./todo/TodoPrivateWrapper.bs.js");
 
 function App(Props) {
-  Props.token;
+  var token = Props.token;
+  ApolloClient$ReactHooksTemplate.makeApolloClient(token);
   return React.createElement("div", undefined, React.createElement(Navbar$ReactHooksTemplate.make, { }), React.createElement("div", {
                   className: "container-fluid p-left-right-0"
                 }, React.createElement("div", {
