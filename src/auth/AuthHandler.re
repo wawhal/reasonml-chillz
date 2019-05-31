@@ -31,7 +31,7 @@ let make = () => {
     None
   }, (None, None));
   switch(state.token) {
-    | Some(token) => <App token={token}/>
+    | Some(_) => <App />
     | None => <Login />
   };
 };

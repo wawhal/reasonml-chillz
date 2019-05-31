@@ -15,7 +15,7 @@ let make = (~urlHash: string) => {
           let idToken = Js.String.substr(~from=9, auth0Response[1]);
           Util.saveTokenToStorage(idToken);
           ReasonReactRouter.push("/");
-          <App token={idToken}/>
+          <App />
         }
       }
     };

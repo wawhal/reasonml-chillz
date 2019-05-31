@@ -1,5 +1,5 @@
 [@react.component]
-let make = (~token: string) => {
+let make = () => {
   <div>
     <Navbar />
     <div className="container-fluid p-left-right-0">
