@@ -5,20 +5,20 @@ var React = require("react");
 
 function TodoItem(Props) {
   var todo = Props.todo;
-  var todoStyle = todo[/* is_completed */2] ? " complete" : "";
+  var todoStyle = todo.is_completed ? " complete" : "";
   return React.createElement("li", undefined, React.createElement("div", {
                   className: "view"
                 }, React.createElement("div", {
                       className: "round"
                     }, React.createElement("input", {
-                          id: String(todo[/* id */0]),
-                          checked: todo[/* is_completed */2],
+                          id: String(todo.id),
+                          checked: todo.is_completed,
                           type: "checkbox"
                         }), React.createElement("label", {
-                          htmlFor: String(todo[/* id */0])
+                          htmlFor: String(todo.id)
                         }))), React.createElement("div", {
                   className: "labelContent" + todoStyle
-                }, React.createElement("div", undefined, todo[/* title */1])), React.createElement("button", {
+                }, React.createElement("div", undefined, todo.title)), React.createElement("button", {
                   className: "closeBtn"
                 }, "x"));
 }

@@ -1,23 +1,3 @@
-// sample data
-open TodoTypes;
-let sampleTodos : array(todo) = [|
-  {
-    id: 1,
-    title: "This is private todo 1",
-    is_completed: true,
-    is_public: false,
-    user: None,
-  },
-  {
-    id: 2,
-    title: "This is private todo 2",
-    is_completed: false,
-    is_public: false,
-    user: None
-  }
-|];
-
-// state type
 type state = {
   filter: string
 };
@@ -37,32 +17,45 @@ let make = () => {
     {filter: "all"}
   );
 
-  let filteredTodos =
-    sampleTodos
-    |> Array.to_list
-    |> List.filter((todo) =>
-      switch(todo.is_completed) {
-        | true => state.filter === "all" || state.filter === "complete"
-        | false => state.filter === "all" || state.filter === "active"
-      })
-    |> List.map((t) => <TodoItem todo={t} />)
+  <GraphQLQueries.GetMyTodosQuery>
+    ...{
+      ({result}) => switch(result) {
+        | Loading => <div>{ReasonReact.string("Loading")}</div>
+        | Error(error) => {
+          Js.Console.error(error);
+          <div>{ReasonReact.string("Loading")}</div>
+        }
+        | Data(data) => {
+          let filteredTodos =
+            data##todos
+            |> Array.to_list
+            |> List.filter((todo) =>
+              switch(todo##is_completed) {
+                | true => state.filter === "all" || state.filter === "complete"
+                | false => state.filter === "all" || state.filter === "active"
+              })
+            |> List.map((t) => <TodoItem todo={t} />)
 
-  // filter callback
-  let filterTodos = (f) => {
-    dispatch(UpdateFilter(f))
-  };
+          // filter callback
+          let filterTodos = (f) => {
+            dispatch(UpdateFilter(f))
+          };
 
-  // return JSX
-  <React.Fragment>
-    <div className="todoListWrapper">
-      <ul>
-        {ReasonReact.array(Array.of_list(filteredTodos))}
-      </ul>
-    </div>
-    <TodoFilters
-      todoCount={List.length(filteredTodos)}
-      currentFilter={state.filter}
-      filterFunc={filterTodos}
-    />
-  </React.Fragment>
+          // return JSX
+          <React.Fragment>
+            <div className="todoListWrapper">
+              <ul>
+                {ReasonReact.array(Array.of_list(filteredTodos))}
+              </ul>
+            </div>
+            <TodoFilters
+              todoCount={List.length(filteredTodos)}
+              currentFilter={state.filter}
+              filterFunc={filterTodos}
+            />
+          </React.Fragment>
+        } 
+      }
+    }
+  </GraphQLQueries.GetMyTodosQuery>
 }
