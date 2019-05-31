@@ -5,97 +5,110 @@ title: "Set up a GraphQL client with Apollo"
 import GithubLink from "../src/GithubLink.js";
 import YoutubeEmbed from "../src/YoutubeEmbed.js";
 
-<YoutubeEmbed link="https://www.youtube.com/embed/m3IAzTwoUUM" />
+Apollo gives a neat abstraction layer and an interface to your GraphQL server. You don't need to worry about constructing your queries with request body, headers and options, that you might have done with `Fetch.fetch`. You can directly write queries and mutations in GraphQL and they will automatically be sent to your server via your apollo client instance.
 
-Apollo gives a neat abstraction layer and an interface to your GraphQL server. You don't need to worry about constructing your queries with request body, headers and options, that you might have done with `axios` or `fetch` say. You can directly write queries and mutations in GraphQL and they will automatically be sent to your server via your apollo client instance.
+## Installation
 
 Let's get started by installing apollo client & peer graphql dependencies:
 
 ```bash
-$ npm install --save apollo-client react-apollo apollo-cache-inmemory apollo-link-http graphql graphql-tag
+$ npm install --save apollo-client react-apollo reason-apollo apollo-cache-inmemory apollo-link-http graphql graphql-tag
 ```
 
-Open `src/components/App.js` and add the following imports at the top:
+You also need to add a helper package called `graphql_ppx` to the dev dependencies to handle GraphQL query and mutation types elegantly.
 
-<GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/react-apollo/app-final/src/components/App.js" text="src/components/App.js" />
+```bash
+npm install --save-dev graphql_ppx
+```
 
-```javascript
-import React from 'react';
+Also, add `reason-apollo` and `graphql_ppx` to the `bs-dependencies` and `ppx_flags` respectively in your `bsconfig.json`.
 
-import Header from './Header';
-import TodoPrivateWrapper from './Todo/TodoPrivateWrapper';
-import TodoPublicWrapper from './Todo/TodoPublicWrapper';
-import OnlineUsersWrapper from './OnlineUsers/OnlineUsersWrapper';
+```json
+{
+  "bs-dependencies": [
+    ...,
+    "reason-apollo"
+  ],
+  "ppx-flags": [
+    "graphql_ppx/ppx"
+  ]  
+}
+```
 
-+ import ApolloClient from 'apollo-client';
-+ import { InMemoryCache } from 'apollo-cache-inmemory';
-+ import { HttpLink } from 'apollo-link-http';
-+ import { ApolloProvider } from 'react-apollo';
+Finally, you need a `graphql_schema.json` in the root of your project so that the GraphQL queries and mutations are type checked against it. To get `graphql_schema.json`,
 
-const App = ({auth}) => {
-  return (
-    <div>
-      <Header logoutHandler={auth.logout} />
-      <div className="container-fluid p-left-right-0">
-        <div className="col-xs-12 col-md-9 p-left-right-0">
-          <div className="col-xs-12 col-md-6 sliderMenu p-30">
-            <TodoPrivateWrapper />
-          </div>
-          <div className="col-xs-12 col-md-6 sliderMenu p-30 bg-gray border-right">
-            <TodoPublicWrapper />
-          </div>
-        </div>
-        <div className="col-xs-12 col-md-3 p-left-right-0">
-          <div className="col-xs-12 col-md-12 sliderMenu p-30 bg-gray">
-            <OnlineUsersWrapper />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+1. Go to https://learn.hasura.io/graphql/graphiql and login
+2. Copy the JWT from headers:
+  ![graphiql-jwt-copy](https://storage.googleapis.com/graphql-engine-cdn.hasura.io/learn-hasura/assets/graphql-reason-react-apollo/graphiql-jwt-copy.png)
+3. Run this command from the root of your project:
+
+  ```js
+  npx send-introspection-query https://learn.hasura.io/graphql --haders "Authorization: Bearer <JWT>"
+  ```
+
+## Setup
+
+Create a file called `src/ApolloClient.re` and create an instance of Apollo Client in it as follows:
+
+<GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/reason-react-apollo/app-final/src/ApolloClient.re" text="ApolloClient.re" />
+
+```js
+// in memory cache for caching GraphQL data 
+let cache = ApolloInMemoryCache.createInMemoryCache();
+
+// apollo link instance as a network interface for apollo client
+// apollo link also has to be configured with headers
+// we get token from local storage and configure apollo link headers with it
+let headers = switch(Util.getTokenFromStorage()) {
+  | None => Json.Encode.object_([])
+  | Some(token) => {
+    Js.log(token);
+    Json.Encode.object_([("Authorization", Json.Encode.string("Bearer " ++ token))])
+  }
 };
 
-export default App;
-```
+let link = ApolloLinks.createHttpLink(
+  ~uri="https://learn.hasura.io/graphql",
+  ~headers=headers,
+  ()
+);
 
-These are the required apollo dependencies to get started. Now let's define a function which will return apollo client with httplink and cache.
-
-```javascript
-import ApolloClient from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
-import { ApolloProvider } from 'react-apollo';
-
-+ const createApolloClient = (authToken) => {
-+  return new ApolloClient({
-+    link: new HttpLink({
-+      uri: 'https://learn.hasura.io/graphql',
-+      headers: {
-+        Authorization: `Bearer ${authToken}`
-+      }
-+    }),
-+    cache: new InMemoryCache(),
-+  });
-+ };
-```
-Create the apollo client inside `App` and pass the client prop to `<ApolloProvider>` component.
-
-```javascript
-const App = ({auth}) => {
-+  const client = createApolloClient(auth.idToken);
-   return (
-+    <ApolloProvider client={client}>
-       <div>
-       </div>
-+    </ApolloProvider>
-   );
-};
+// apollo client instance
+let instance = ReasonApollo.createApolloClient(~link, ~cache, ());
 ```
 
 Let's try to understand what is happening here. 
 
-We are creating an `HttpLink` to connect ApolloClient with the GraphQL server. As you know already, our GraphQL server is running at [https://learn.hasura.io/graphql](https://learn.hasura.io/graphql)
+We are creating an `HttpLink` to connect ApolloClient with the GraphQL server. As you know already, our GraphQL server is running at [https://learn.hasura.io/graphql](https://learn.hasura.io/graphql). We are also configuring the headers with the JWT token from the local storage.
 
-At the end, we instantiate ApolloClient by passing in our HttpLink and a new instance of `InMemoryCache` (recommended caching solution). We are wrapping all of this in a function which will return the client.
+At the end, we instantiate ApolloClient by passing in our `HttpLink` and a new instance of `InMemoryCache` (recommended caching solution). This instance can be used anywhere in the application as `.
 
-We are going to make use of this function inside `App` component.
+Finally, we have to use this instance in `src/App.re` to provide the child application with Apollo Client so that its features can be leveraged throughout the application.
+
+<GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/reason-react-apollo/app-final/src/App.re" text="App.re" />
+
+```js
+[@react.component]
+let make = () => {
+-  <div>
++  <ReasonApollo.Provider client=ApolloClient.instance>
+    <Navbar />
+    <div className="container-fluid p-left-right-0">
+      <div className="col-xs-12 col-md-9 p-left-right-0">
+        <div className="col-xs-12 col-md-6 sliderMenu p-30">
+          <TodoPrivateWrapper />
+        </div>
+        <div className="col-xs-12 col-md-6 sliderMenu p-30 bg-gray border-right">
+          <TodoPublicWrapper />
+        </div>
+      </div>
+      <div className="col-xs-12 col-md-3 p-left-right-0">
+        <div className="col-xs-12 col-md-12 sliderMenu p-30 bg-gray">
+          <OnlineUsersWrapper />
+        </div>
+      </div>
+    </div>
+-  </div>
++  </ReasonApollo.Provider>
+}
+```

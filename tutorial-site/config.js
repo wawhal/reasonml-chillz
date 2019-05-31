@@ -1,15 +1,15 @@
 const config = {
 	"gatsby": {
-		"pathPrefix": "/graphql/reasonreact",
+		"pathPrefix": "/graphql/reason-react-apollo",
 		"siteUrl": "https://learn.hasura.io",
 		"gaTrackingId": "UA-59768903-1"
 	},
 	"header": {
 		"logo": "https://graphql-engine-cdn.hasura.io/img/hasura_icon_white.svg",
-		"title": "/ graphql / reasonreact",
+		"title": "/ graphql / reason-react-apollo",
 		"githubUrl": "https://github.com/hasura/graphql-engine",
 		"helpUrl": "https://discordapp.com/invite/vBPpJkS",
-		"tweetText": "Check out this GraphQL course for React developers by @HasuraHQ https://learn.hasura.io/graphql/reasonreact",
+		"tweetText": "Check out this GraphQL course for React developers by @HasuraHQ https://learn.hasura.io/graphql/reason-react-apollo",
 		"links": [{
 			"text": "hasura.io",
 			"link": "https://hasura.io"

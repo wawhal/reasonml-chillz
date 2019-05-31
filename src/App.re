@@ -1,6 +1,6 @@
 [@react.component]
 let make = () => {
-  <div>
+  <ReasonApollo.Provider client=ApolloClient.instance>
     <Navbar />
     <div className="container-fluid p-left-right-0">
       <div className="col-xs-12 col-md-9 p-left-right-0">
@@ -17,5 +17,5 @@ let make = () => {
         </div>
       </div>
     </div>
-  </div>
+  </ReasonApollo.Provider>
 }

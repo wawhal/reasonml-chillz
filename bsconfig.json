@@ -16,8 +16,12 @@
   "namespace": true,
   "bs-dependencies": [
     "reason-react",
+    "reason-apollo",
     "bs-react-bootstrap",
     "@glennsl/bs-json"
   ],
+  "ppx-flags": [
+    "graphql_ppx/ppx"
+  ],  
   "refmt": 3
 }
