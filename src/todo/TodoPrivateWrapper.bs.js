@@ -10,7 +10,9 @@ function TodoPrivateWrapper(Props) {
               className: "todoWrapper"
             }, React.createElement("div", {
                   className: "sectionHeader"
-                }, "Personal todos"), React.createElement(TodoInput$ReactHooksTemplate.make, { }), React.createElement(TodoPrivateList$ReactHooksTemplate.make, { }));
+                }, "Personal todos"), React.createElement(TodoInput$ReactHooksTemplate.make, {
+                  isPublic: false
+                }), React.createElement(TodoPrivateList$ReactHooksTemplate.make, { }));
 }
 
 var make = TodoPrivateWrapper;

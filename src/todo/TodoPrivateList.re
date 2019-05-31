@@ -1,19 +1,21 @@
 // sample data
 open TodoTypes;
-let sampleTodos : list(todo) = [
+let sampleTodos : array(todo) = [|
   {
     id: 1,
     title: "This is private todo 1",
     is_completed: true,
-    is_public: false
+    is_public: false,
+    user: None,
   },
   {
     id: 2,
     title: "This is private todo 2",
     is_completed: false,
-    is_public: false
+    is_public: false,
+    user: None
   }
-];
+|];
 
 // state type
 type state = {
@@ -28,21 +30,22 @@ type action =
 let make = () => {
 
   // state and reducer
-  let (state, dispatch) = React.useReducer((state, action) =>
+  let (state, dispatch) = React.useReducer((_, action) =>
     switch(action) {
       | UpdateFilter(filter) => { filter: filter }
     },
     {filter: "all"}
   );
 
-  // filtering todos
-  let filteredTodos = List.filter((todo) => {
-    switch(todo.is_completed) {
-      | true => state.filter === "all" || state.filter === "complete"
-      | false => state.filter === "all" || state.filter === "active"
-    };
-  }, sampleTodos);
-  let todoList = List.map((t) => <TodoItem todo={t} />, filteredTodos);
+  let filteredTodos =
+    sampleTodos
+    |> Array.to_list
+    |> List.filter((todo) =>
+      switch(todo.is_completed) {
+        | true => state.filter === "all" || state.filter === "complete"
+        | false => state.filter === "all" || state.filter === "active"
+      })
+    |> List.map((t) => <TodoItem todo={t} />)
 
   // filter callback
   let filterTodos = (f) => {
@@ -53,7 +56,7 @@ let make = () => {
   <React.Fragment>
     <div className="todoListWrapper">
       <ul>
-        {ReasonReact.array(Array.of_list(todoList))}
+        {ReasonReact.array(Array.of_list(filteredTodos))}
       </ul>
     </div>
     <TodoFilters

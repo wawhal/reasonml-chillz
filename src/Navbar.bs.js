@@ -2,8 +2,14 @@
 'use strict';
 
 var React = require("react");
+var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.js");
+var Util$ReactHooksTemplate = require("./auth/Util.bs.js");
 
 function Navbar(Props) {
+  var logout = function (param) {
+    Util$ReactHooksTemplate.removeTokenFromStorage(/* () */0);
+    return ReasonReactRouter.push("/login");
+  };
   return React.createElement("nav", {
               className: "m-bottom-0 navbar navbar-default"
             }, React.createElement("div", {
@@ -21,7 +27,8 @@ function Navbar(Props) {
                                   href: ""
                                 }, React.createElement("button", {
                                       className: "btn-margin logoutBtn btn btn-primary",
-                                      id: "qsLogoutBtn"
+                                      id: "qsLogoutBtn",
+                                      onClick: logout
                                     }, "Log out")))))));
 }
 

@@ -4,6 +4,7 @@
 var React = require("react");
 
 function TodoInput(Props) {
+  Props.isPublic;
   return React.createElement("form", {
               className: "formInput"
             }, React.createElement("input", {

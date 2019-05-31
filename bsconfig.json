@@ -16,7 +16,8 @@
   "namespace": true,
   "bs-dependencies": [
     "reason-react",
-    "bs-react-bootstrap"
+    "bs-react-bootstrap",
+    "@glennsl/bs-json"
   ],
   "refmt": 3
 }

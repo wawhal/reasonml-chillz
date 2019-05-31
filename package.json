@@ -16,6 +16,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@glennsl/bs-json": "^3.0.0",
     "auth0-js": "^9.10.4",
     "bs-react-bootstrap": "^0.1.0",
     "react": "^16.8.1",
