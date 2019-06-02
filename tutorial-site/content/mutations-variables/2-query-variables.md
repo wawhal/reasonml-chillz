@@ -10,47 +10,54 @@ GraphQL has a first-class way to factor dynamic values out of the query, and pas
 
 So let's define the graphql mutation to be used.
 
-Open `src/components/Todo/TodoInput.js` and add the following code:
+Open `src/components/GraphQLQueries.re` and add the following code:
 
-<GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/react-apollo/app-final/src/components/Todo/TodoInput.js" text="src/components/Todo/TodoInput.js" />
+<GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/react-apollo/app-final/src/GraphQLQueries.re" text="GraphQLQueries.re" />
 
 ```javascript
-import React from 'react';
-+ import gql from 'graphql-tag';
+// GraphQL query for getting my todos
+module GetMyTodos = [%graphql
+  {|
+    query getMyTodos {
+      todos(where: { is_public: { _eq: false} }, order_by: { id: desc }) {
+        id
+        title
+        is_completed
+        is_public
+      }
+    }
+  |}
+];
+module GetMyTodosQuery = ReasonApollo.CreateQuery(GetMyTodos);
 
-+ const ADD_TODO = gql `
-+  mutation ($todo: String!, $isPublic: Boolean!) {
-+    insert_todos(objects: {title: $todo, is_public: $isPublic}) {
-+      affected_rows
-+      returning {
-+        id
-+        title
-+        created_at
-+        is_completed
++// GraphQL mutation for inserting a todo
++module InsertMyTodo = [%graphql
++  {|
++    mutation ($todo: String!, $isPublic: Boolean!) {
++      insert_todos(objects: {title: $todo, is_public: $isPublic}) {
++        affected_rows
++        returning {
++          id
++          title
++          created_at
++          is_completed
++        }
 +      }
 +    }
-+  }
-+ `;
++  |}
++];
++module InsertMyTodoMutation = ReasonApollo.CreateMutation(InsertMyTodo);
 
-const TodoInput = ({isPublic=false}) => {
-  return (
-    <form className="formInput" onSubmit={(e) => {
-      e.preventDefault();
-    }}>
-      <input
-        className="input"
-        placeholder="What needs to be done?"
-      />
-      <i className="inputMarker fa fa-angle-right" />
-    </form>
-  );
-};
-
-export default TodoInput;
 ```
+
+In the above code,
+
+- `InsertMyTodo` is a mutation module built from plain query string using `graphql_ppx`. 
+- `InsertMyTodoMutation` is a typed React component that provides the `mutation` function (a function that performs the given mutation) in its render prop function so that it can be utilised by the events. It is similar to the `<Mutation>` component in `react-apollo`.
+
 
 What does this mutation do?
 ---------------------------
-The mutation inserts into `todos` table with the $objects variable being passed as one todo type.
+The mutation inserts into `todos` table with the `objects` variable being passed as one todo type.
 
-Awesome! We have defined our first graphql mutation.
+Awesome! We have defined our first graphql mutation. In the next section, we will pass the query variables to this mutation and finally integrate this mutation with our `insert todo` functionality.

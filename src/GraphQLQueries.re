@@ -1,4 +1,4 @@
-// GraphQL query module for getting my todos
+// GraphQL query for getting my todos
 module GetMyTodos = [%graphql
   {|
     query getMyTodos {
@@ -12,3 +12,21 @@ module GetMyTodos = [%graphql
   |}
 ];
 module GetMyTodosQuery = ReasonApollo.CreateQuery(GetMyTodos);
+
+// GraphQL mutation for inserting a todo
+module InsertMyTodo = [%graphql
+  {|
+    mutation ($todo: String!, $isPublic: Boolean!) {
+      insert_todos(objects: {title: $todo, is_public: $isPublic}) {
+        affected_rows
+        returning {
+          id
+          title
+          created_at
+          is_completed
+        }
+      }
+    }
+  |}
+];
+module InsertMyTodoMutation = ReasonApollo.CreateMutation(InsertMyTodo);
