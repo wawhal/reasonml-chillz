@@ -31,7 +31,7 @@ let make = () => {
     None
   }, (None, None));
   switch(state.token) {
-    | Some(_) => <App />
+    | Some(_) => if (Util.isSessionValid()) { <App /> } else { <Login />}
     | None => <Login />
   };
 };

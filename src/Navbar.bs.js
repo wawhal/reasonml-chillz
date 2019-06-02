@@ -7,7 +7,7 @@ var Util$ReactHooksTemplate = require("./auth/Util.bs.js");
 
 function Navbar(Props) {
   var logout = function (param) {
-    Util$ReactHooksTemplate.removeTokenFromStorage(/* () */0);
+    Util$ReactHooksTemplate.removeSessionFromStorage(/* () */0);
     return ReasonReactRouter.push("/login");
   };
   return React.createElement("nav", {

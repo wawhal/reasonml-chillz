@@ -1,7 +1,7 @@
 [@react.component]
 let make = () => {
   let logout = (_) => {
-    Util.removeTokenFromStorage();
+    Util.removeSessionFromStorage();
     ReasonReactRouter.push("/login");
   };
   <nav className="m-bottom-0 navbar navbar-default">
