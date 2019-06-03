@@ -10,43 +10,28 @@ GraphQL has a first-class way to factor dynamic values out of the query, and pas
 
 So let's define the graphql mutation to be used.
 
-Open `src/components/GraphQLQueries.re` and add the following code:
+Open `src/GraphQLQueries.re` and add the following code:
 
 <GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/react-apollo/app-final/src/GraphQLQueries.re" text="GraphQLQueries.re" />
 
 ```javascript
-// GraphQL query for getting my todos
-module GetMyTodos = [%graphql
+// GraphQL mutation for inserting a todo
+module InsertMyTodo = [%graphql
   {|
-    query getMyTodos {
-      todos(where: { is_public: { _eq: false} }, order_by: { id: desc }) {
-        id
-        title
-        is_completed
-        is_public
+    mutation ($todo: String!, $isPublic: Boolean!) {
+      insert_todos(objects: {title: $todo, is_public: $isPublic}) {
+        affected_rows
+        returning {
+          id
+          title
+          created_at
+          is_completed
+        }
       }
     }
   |}
 ];
-module GetMyTodosQuery = ReasonApollo.CreateQuery(GetMyTodos);
-
-+// GraphQL mutation for inserting a todo
-+module InsertMyTodo = [%graphql
-+  {|
-+    mutation ($todo: String!, $isPublic: Boolean!) {
-+      insert_todos(objects: {title: $todo, is_public: $isPublic}) {
-+        affected_rows
-+        returning {
-+          id
-+          title
-+          created_at
-+          is_completed
-+        }
-+      }
-+    }
-+  |}
-+];
-+module InsertMyTodoMutation = ReasonApollo.CreateMutation(InsertMyTodo);
+module InsertMyTodoMutation = ReasonApollo.CreateMutation(InsertMyTodo);
 
 ```
 

@@ -9,11 +9,26 @@ let make = (~todo) => {
   <li>
     <div className="view">
       <div className="round">
-        <input
-          type_="checkbox"
-          checked={todo##is_completed}
-          id={string_of_int(todo##id)}
-        />
+        <GraphQLQueries.ToggleMyTodoMutation>
+          ...{
+            (updateTodo, _) => {
+              let toggleTodo = GraphQLQueries.ToggleMyTodo.make(~id=todo##id, ~isCompleted=!todo##is_completed, ());
+              <input
+                type_="checkbox"
+                checked={todo##is_completed}
+                id={string_of_int(todo##id)}
+                onChange={
+                  event => {
+                    updateTodo(
+                      ~variables=toggleTodo##variables,
+                      ()
+                    ) |> ignore;
+                  }
+                }
+              />
+            }
+          }
+        </GraphQLQueries.ToggleMyTodoMutation>
         <label htmlFor={string_of_int(todo##id)}/>
       </div>
     </div>
@@ -22,8 +37,26 @@ let make = (~todo) => {
         {ReasonReact.string(todo##title)}
       </div>
     </div>
-    <button className="closeBtn">
-      {ReasonReact.string("x")}
-    </button>
+    <GraphQLQueries.DeleteMyTodoMutation>
+      ...{
+        (deleteTodo, _) => {
+          let removeTodo = GraphQLQueries.DeleteMyTodo.make(~id=todo##id, ());
+          <button
+            className="closeBtn"
+            onClick={
+              ev => {
+                deleteTodo(
+                  ~variables=removeTodo##variables,
+                  ~refetchQueries=[|"getMyTodos"|],
+                  ()
+                ) |> ignore;
+              }
+            }
+          >
+            {ReasonReact.string("x")}
+          </button>
+        }
+      }
+    </GraphQLQueries.DeleteMyTodoMutation>
   </li>
 }

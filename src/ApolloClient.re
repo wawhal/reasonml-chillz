@@ -6,17 +6,17 @@ let cache = ApolloInMemoryCache.createInMemoryCache();
 // we get token from local storage and configure apollo link headers with it
 let headers = switch(Util.getTokenFromStorage()) {
   | None => Json.Encode.object_([])
-  | Some(token) => {
-    Js.log(token);
-    Json.Encode.object_([("Authorization", Json.Encode.string("Bearer " ++ token))])
-  }
+  | Some(token) => Json.Encode.object_([("Authorization", Json.Encode.string("Bearer " ++ token))])
 };
+
+let connectionParams = Json.Encode.object_([("reconnect", Json.Encode.bool(true)), ("headers", headers)]);
 
 let link = ApolloLinks.createHttpLink(
   ~uri="https://learn.hasura.io/graphql",
   ~headers=headers,
   ()
 );
+
 
 // apollo client instance
 let instance = ReasonApollo.createApolloClient(~link, ~cache, ());

@@ -20,4 +20,4 @@ mutation removeTodo ($id: Int!) {
 
 [Try](https://learn.hasura.io/graphql/graphiql) this mutation in GraphiQL against the application database to see what the response looks like. You will also need to pass in the values for the variables.
 
-Let's now integrate this graphql mutation into our react app.
+Let's now integrate this graphql mutation into our app.
