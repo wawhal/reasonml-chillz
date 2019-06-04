@@ -9,14 +9,14 @@ let headers = switch(Util.getTokenFromStorage()) {
   | Some(token) => Json.Encode.object_([("Authorization", Json.Encode.string("Bearer " ++ token))])
 };
 
-let connectionParams = Json.Encode.object_([("reconnect", Json.Encode.bool(true)), ("headers", headers)]);
+let connectionParams = Json.Encode.object_([("headers", headers)]);
 
-let link = ApolloLinks.createHttpLink(
-  ~uri="https://learn.hasura.io/graphql",
-  ~headers=headers,
+let link = ApolloLinks.webSocketLink(
+  ~uri="wss://learn.hasura.io/graphql",
+  ~reconnect=true,
+  ~connectionParams=connectionParams,
   ()
 );
-
 
 // apollo client instance
 let instance = ReasonApollo.createApolloClient(~link, ~cache, ());

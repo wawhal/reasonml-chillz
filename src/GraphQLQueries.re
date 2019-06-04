@@ -59,3 +59,29 @@ module DeleteMyTodo = [%graphql
   |}
 ];
 module DeleteMyTodoMutation = ReasonApollo.CreateMutation(DeleteMyTodo);
+
+// GraphQL subscription to get the list of online users
+module GetOnlineUsers = [%graphql
+  {|
+    subscription getOnlineUsers {
+      online_users(order_by: {user: {name: asc }}) {
+        id
+        user {
+          name
+        }
+      }
+    }
+  |}
+];
+module GetOnlineUsersSubscription = ReasonApollo.CreateSubscription(GetOnlineUsers);
+
+// GraphQL mutation to update last seen
+module UpdateLastSeen = [%graphql
+  {|
+    mutation updateLastSeen ($now: timestamptz!) {
+      update_users(where: {}, _set: {last_seen: $now}) {
+        affected_rows
+      }
+    }
+  |}
+];
