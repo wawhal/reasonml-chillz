@@ -45,6 +45,28 @@ let make = (~client) => {
     { "todos": todos }
   }, { "todos": [] });
 
+  let fetchPublicTodos = () => {
+    let fetchPublicTodosQuery = GraphQLQueries.GetPublicTodos.make(());
+    let query = {
+      "query": ApolloClient.gql(. fetchPublicTodosQuery##query),
+      "variables": fetchPublicTodosQuery##variables
+    };
+    let apolloData = client##query(query);
+    apolloData
+    |> Js.Promise.then_(response => {
+          Js.log(response);
+          Js.log("Something");
+          Js.Promise.resolve(response)
+       });
+  };
+
+  React.useEffect0(
+    () => {
+      fetchPublicTodos();
+      None;
+    }
+  );
+
   let todoList = List.map((t) => <FeedItem todo={t} />, sampleTodos) ;
 
   let newTodosBanner = {

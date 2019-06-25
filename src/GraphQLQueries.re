@@ -90,7 +90,7 @@ module UpdateLastSeen = [%graphql
 module GetPublicTodos = [%graphql
   {|
      query getPublicTodos {
-       todos(where: { is_public: { _eq: true } }, order_by: { id: desc }) {
+       todos(where: { is_public: { _eq: true } }, order_by: { id: desc }, limit: 10) {
         id
          title
          created_at
