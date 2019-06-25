@@ -128,11 +128,12 @@ After adding the above two code snippets, your `OnlineUsersWrapper.re` file shou
 +      Some(() => Js.Global.clearInterval(timerId));
 +    }
 +  );
-  <GraphQLQueries.GetOnlineUsersSubscription>
-    ...{
-      ...
-    }
-  </GraphQLQueries.GetOnlineUsersSubscription >
+   <div className="onlineUsersWrapper">
+      <div className="sliderHeader">
+        {ReasonReact.string(onlineUsersTitle)}
+      </div>
+      {ReasonReact.array(Array.of_list(onlineUsers))}
+   </div>
 }
 ```
 
