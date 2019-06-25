@@ -1,50 +1,49 @@
-open TodoTypes;
+type user = {
+  .
+  "name": string
+};
+
+type todoType = {
+  .
+  "id": int,
+  "created_at": string,
+  "title": string,
+  "user": user
+};
+
+type state = {
+  .
+  "todos": list(todoType)
+};
 
 let sampleTodos = [
   {
-    id: 1,
-    title: "This is public todo 1",
-    is_public: true,
-    is_completed: false,
-    user: Some({
-      id: 33,
-      name: "someUser1"
-    })
+    "id": 1,
+    "title": "task1",
+    "created_at": "something",
+    "user": {
+      "name": "User 1"
+    }
   },
   {
-    id: 2,
-    title: "This is public todo 2",
-    is_public: true,
-    is_completed: false,
-    user: Some({
-      id: 45,
-      name: "someUser2"
-    })
-  },
-  {
-    id: 3,
-    title: "This is public todo 3",
-    is_public: true,
-    is_completed: false,
-    user: Some({
-      id: 55,
-      name: "someUser3"
-    })
-  },
-  {
-    id: 4,
-    title: "This is public todo 4",
-    is_public: true,
-    is_completed: false,
-    user: Some({
-      id:244,
-      name: "someUser4"
-    })
+    "id": 2,
+    "title": "task2",
+    "created_at": "something2",
+    "user": {
+      "name": "User 2"
+    }
   }
 ];
 
+type action = SetTodos(list(todoType));
+
 [@react.component]
 let make = (~client) => {
+
+  let (state, dispatch) = React.useReducer((_, action) => {
+    let SetTodos(todos) = action;
+    { "todos": todos }
+  }, { "todos": [] });
 
   let todoList = List.map((t) => <FeedItem todo={t} />, sampleTodos) ;
 

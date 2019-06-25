@@ -85,3 +85,19 @@ module UpdateLastSeen = [%graphql
     }
   |}
 ];
+
+// GraphQL query to fetch public todos
+module GetPublicTodos = [%graphql
+  {|
+     query getPublicTodos {
+       todos(where: { is_public: { _eq: true } }, order_by: { id: desc }) {
+        id
+         title
+         created_at
+         user {
+           name
+         }
+       }
+     }
+  |}
+];

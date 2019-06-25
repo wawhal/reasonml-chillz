@@ -1,22 +1,12 @@
-open TodoTypes;
-
 [@react.component]
-let make = (~todo: todo) => {
-  let userString = switch(todo.user) {
-    | Some(u) => "@" ++ u.name
-    | None => ""
-  };
-  let todoTextStyle = "labelContent" ++ switch(todo.is_completed) {
-    | true => " completed"
-    | _ => ""
-  };
+let make = (~todo) => {
   <li>
-    <div className="userInfoPublic" title={userString}>
-      {ReasonReact.string(userString)}
+    <div className="userInfoPublic" title={todo##user##name}>
+      {ReasonReact.string(todo##user##name)}
     </div>
-    <div className={todoTextStyle}>
+    <div>
       <div>
-        {ReasonReact.string(todo.title)}
+        {ReasonReact.string(todo##title)}
       </div>
     </div>
   </li>

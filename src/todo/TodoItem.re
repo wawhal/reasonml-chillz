@@ -1,5 +1,6 @@
 [@react.component]
 let make = (~todo) => {
+
   let todoStyle = if (todo##is_completed) {
     " complete"
   } else {
