@@ -75,7 +75,10 @@ let link = ApolloLinks.createHttpLink(
 
 // apollo client instance
 let instance = ReasonApollo.createApolloClient(~link, ~cache, ());
+
+[@bs.module] external gql: ReasonApolloTypes.gql = "graphql-tag";
 ```
+
 
 Let's try to understand what is happening here. 
 
@@ -84,6 +87,8 @@ We are creating an `HttpLink` to connect ApolloClient with the GraphQL server. A
 At the end, we instantiate ApolloClient by passing in our `HttpLink` and a new instance of `InMemoryCache` (recommended caching solution). This instance can be used anywhere in the application as `.
 
 Finally, we have to use this instance in `src/App.re` to provide the child application with Apollo Client so that its features can be leveraged throughout the application.
+
+We also bind manually bind `gql` so that we can fire GraphQL Queries manually without the JSX components. (More on this later)
 
 <GithubLink link="https://github.com/hasura/graphql-engine/blob/master/community/learn/graphql-tutorials/tutorials/reason-react-apollo/app-final/src/App.re" text="App.re" />
 

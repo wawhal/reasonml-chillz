@@ -21,3 +21,4 @@ let link = ApolloLinks.createHttpLink(
 // apollo client instance
 let instance = ReasonApollo.createApolloClient(~link, ~cache, ());
 
+[@bs.module] external gql: ReasonApolloTypes.gql = "graphql-tag";
