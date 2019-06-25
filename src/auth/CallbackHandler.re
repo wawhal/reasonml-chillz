@@ -1,10 +1,12 @@
 [@react.component]
 let make = (~urlHash: string) => {
+  Js.log(urlHash);
   if (urlHash == "") {
     ReasonReactRouter.push("/login");
     <Login />;
   } else {
     let auth0Response = Js.String.split("&", urlHash);
+    Js.log(auth0Response);
     switch(Array.length(auth0Response)) {
       | 0 | 1 | 2 => <Login />
       | _ => {

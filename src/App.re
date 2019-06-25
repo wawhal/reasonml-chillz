@@ -13,7 +13,13 @@ let make = () => {
       </div>
       <div className="col-xs-12 col-md-3 p-left-right-0">
         <div className="col-xs-12 col-md-12 sliderMenu p-30 bg-gray">
-        <OnlineUsersWrapper />
+        <ReasonApollo.Consumer>
+          {
+            client => {
+              <OnlineUsersWrapper client={client}/>
+            }
+          }
+        </ReasonApollo.Consumer>
         </div>
       </div>
     </div>

@@ -5,7 +5,13 @@ let make = () => {
       {ReasonReact.string("Public feed (realtime)")}
     </div>
     <TodoInput isPublic=true/>
-    <TodoPublicList />
+    <ReasonApollo.Consumer>
+      ...{
+        client => {
+          <TodoPublicList client={client}/>
+        }
+      }
+    </ReasonApollo.Consumer>
   </div>
 }
 

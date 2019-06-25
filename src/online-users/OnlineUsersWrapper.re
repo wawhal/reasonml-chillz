@@ -1,5 +1,20 @@
 [@react.component]
-let make = () => {
+let make = (~client) => {
+  let updateMyLastSeen = () => {
+    let updateLastSeenMutation = GraphQLQueries.UpdateLastSeen.make(());
+    let mutation = {
+      "mutation": ApolloClient.gql(. updateLastSeenMutation##query),
+      "variables": updateLastSeenMutation##variables
+    };
+    client##mutate(mutation);
+    ();
+  }
+  React.useEffect0(
+    () => {
+      let timerId = Js.Global.setInterval(updateMyLastSeen, 5000);
+      Some(() => Js.Global.clearInterval(timerId));
+    }
+  );
   <GraphQLQueries.GetOnlineUsersSubscription>
     ...{
       ({result}) => switch(result) {

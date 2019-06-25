@@ -78,8 +78,8 @@ module GetOnlineUsersSubscription = ReasonApollo.CreateSubscription(GetOnlineUse
 // GraphQL mutation to update last seen
 module UpdateLastSeen = [%graphql
   {|
-    mutation updateLastSeen ($now: timestamptz!) {
-      update_users(where: {}, _set: {last_seen: $now}) {
+    mutation updateLastSeen {
+      update_users(where: {}, _set: {last_seen: "now()"}) {
         affected_rows
       }
     }

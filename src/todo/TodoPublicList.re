@@ -44,7 +44,7 @@ let sampleTodos = [
 ];
 
 [@react.component]
-let make = () => {
+let make = (~client) => {
 
   let todoList = List.map((t) => <FeedItem todo={t} />, sampleTodos) ;
 
