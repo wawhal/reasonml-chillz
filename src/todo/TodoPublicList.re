@@ -53,10 +53,9 @@ let make = (~client) => {
     };
     let apolloData = client##query(query);
     apolloData
-    |> Js.Promise.then_(response => {
-          Js.log(response);
-          Js.log("Something");
-          Js.Promise.resolve(response)
+    |> Js.Promise.then_(gqlResp => {
+          Js.log(gqlResp);
+          Js.Promise.resolve()
        });
   };
 
@@ -67,7 +66,7 @@ let make = (~client) => {
     }
   );
 
-  let todoList = List.map((t) => <FeedItem todo={t} />, sampleTodos) ;
+  let todoList = List.map((t) => <FeedItem todo={t} key={t##title} />, sampleTodos) ;
 
   let newTodosBanner = {
     <div className={"loadMoreSection"}>
