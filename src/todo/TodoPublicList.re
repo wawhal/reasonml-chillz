@@ -27,8 +27,7 @@ type response = {. "data": state};
 external toApolloResult : 'a => response = "%identity";
 
 type action = 
-  | SetTodos(array(todoType))
-  | SetLoading(bool);
+  | SetTodos(array(todoType));
 
 [@react.component]
 let make = (~client) => {
@@ -46,13 +45,32 @@ let make = (~client) => {
       "query": ApolloClient.gql(. fetchPublicTodosQuery##query),
       "variables": fetchPublicTodosQuery##variables
     };
-    let apolloData = c##query(query);
+    let apolloData = client##query(query);
     apolloData
     |> Js.Promise.then_(gqlResp => {
           let resp = toApolloResult(gqlResp);
           dispatch(SetTodos(resp##data##todos));
           Js.Promise.resolve()
        })
+    |> ignore
+  };
+
+  let fetchOlderTodos = () => {
+    let existingTodoLength = Array.length(state##todos);
+    let lastTodoId = if (existingTodoLength == 0) { 10000000 } else { state##todos[existingTodoLength-1]##id };
+    let fetchOlderTodosQuery = GraphQLQueries.GetOlderTodos.make(~lastId=lastTodoId, ());
+    let query = {
+      "query": ApolloClient.gql(. fetchOlderTodosQuery##query),
+      "variables": fetchOlderTodosQuery##variables
+    };
+    let apolloData = c##query(query);
+    apolloData
+    |> Js.Promise.then_(gqlResp => {
+      let resp = toApolloResult(gqlResp);
+      let newTodos = Array.append(state##todos, resp##data##todos);
+      dispatch(SetTodos(newTodos));
+      Js.Promise.resolve();
+    })
     |> ignore
   };
 
@@ -78,7 +96,7 @@ let make = (~client) => {
     };
 
     let oldTodosButton = {
-      <div className={"loadMoreSection"}>
+      <div className={"loadMoreSection"} onClick={_ => fetchOlderTodos()}>
         {ReasonReact.string("Load older tasks")}
       </div>
     };

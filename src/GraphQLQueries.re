@@ -101,3 +101,25 @@ module GetPublicTodos = [%graphql
      }
   |}
 ];
+
+// GraphQL query to public todos older than a particular id
+module GetOlderTodos = [%graphql
+  {|
+    query ($lastId: Int) {
+      todos (
+        order_by: {
+         created_at: desc
+        },
+        where: { id: { _lt: $lastId} },
+        limit: 10
+      ) {
+        id
+        title
+        created_at
+        user {
+          name
+        }
+      }
+    }
+  |}
+];
