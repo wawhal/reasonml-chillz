@@ -13,7 +13,13 @@ type todoType = {
 
 type state = {
   .
-  "todos": list(todoType)
+  "todos": list(todoType),
+  "loading": bool
+};
+
+type todosGqlResp = { 
+  .
+  "data": state
 };
 
 let sampleTodos = [
@@ -35,15 +41,23 @@ let sampleTodos = [
   }
 ];
 
-type action = SetTodos(list(todoType));
+type response = {. "data": state};
+
+external toApolloResult : 'a => response = "%identity";
+
+type action = 
+  | SetTodos(list(todoType))
+  | SetLoading(bool);
 
 [@react.component]
 let make = (~client) => {
 
   let (state, dispatch) = React.useReducer((_, action) => {
     let SetTodos(todos) = action;
-    { "todos": todos }
-  }, { "todos": [] });
+    { "todos": todos, "loading": false }
+  }, { "todos": [], "loading": true });
+
+  let c = ApolloClient.instance;
 
   let fetchPublicTodos = () => {
     let fetchPublicTodosQuery = GraphQLQueries.GetPublicTodos.make(());
@@ -51,12 +65,14 @@ let make = (~client) => {
       "query": ApolloClient.gql(. fetchPublicTodosQuery##query),
       "variables": fetchPublicTodosQuery##variables
     };
-    let apolloData = client##query(query);
+    let apolloData = c##query(query);
     apolloData
     |> Js.Promise.then_(gqlResp => {
-          Js.log(gqlResp);
+          let resp = toApolloResult(gqlResp);
+          dispatch(SetTodos(resp##data##todos));
           Js.Promise.resolve()
-       });
+       })
+    |> ignore
   };
 
   React.useEffect0(
@@ -66,28 +82,43 @@ let make = (~client) => {
     }
   );
 
-  let todoList = List.map((t) => <FeedItem todo={t} key={t##title} />, sampleTodos) ;
-
-  let newTodosBanner = {
-    <div className={"loadMoreSection"}>
-      {ReasonReact.string("New tasks have arrived!")}
+  if (state##loading) {
+    Js.log("Loading..............");
+    <div>
+      {ReasonReact.string("Loading...")}
     </div>
-  };
+  } else {
+    let todoList = List.mapi((i, t) => {
+      Js.log("======================");
+      Js.log(state##todos);
+      Js.log(i);
+      Js.log(t);
+      Js.log(List.nth(state##todos, i*2));
+      Js.log("======================");
+      <FeedItem todo={t} key={t##title} />
+    }, state##todos);
+    let newTodosBanner = {
+      <div className={"loadMoreSection"}>
+        {ReasonReact.string("New tasks have arrived!")}
+      </div>
+    };
 
-  let oldTodosButton = {
-    <div className={"loadMoreSection"}>
-      {ReasonReact.string("Load older tasks")}
-    </div>
-  };
+    let oldTodosButton = {
+      <div className={"loadMoreSection"}>
+        {ReasonReact.string("Load older tasks")}
+      </div>
+    };
 
-  <React.Fragment>
-    <div className="todoListWrapper">
-      {newTodosBanner}
-      <ul>
-        {ReasonReact.array(Array.of_list(todoList))}
-      </ul>
-      {oldTodosButton}
-    </div>
-  </React.Fragment>
+    <React.Fragment>
+      <div className="todoListWrapper">
+        {newTodosBanner}
+        <ul>
+          {ReasonReact.array(Array.of_list(todoList))}
+        </ul>
+        {oldTodosButton}
+      </div>
+    </React.Fragment>
+  }
+
 
 }
