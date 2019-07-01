@@ -13,7 +13,7 @@ type todoType = {
 
 type state = {
   .
-  "todos": list(todoType),
+  "todos": array(todoType),
   "loading": bool
 };
 
@@ -22,31 +22,12 @@ type todosGqlResp = {
   "data": state
 };
 
-let sampleTodos = [
-  {
-    "id": 1,
-    "title": "task1",
-    "created_at": "something",
-    "user": {
-      "name": "User 1"
-    }
-  },
-  {
-    "id": 2,
-    "title": "task2",
-    "created_at": "something2",
-    "user": {
-      "name": "User 2"
-    }
-  }
-];
-
 type response = {. "data": state};
 
 external toApolloResult : 'a => response = "%identity";
 
 type action = 
-  | SetTodos(list(todoType))
+  | SetTodos(array(todoType))
   | SetLoading(bool);
 
 [@react.component]
@@ -55,7 +36,7 @@ let make = (~client) => {
   let (state, dispatch) = React.useReducer((_, action) => {
     let SetTodos(todos) = action;
     { "todos": todos, "loading": false }
-  }, { "todos": [], "loading": true });
+  }, { "todos": [||], "loading": true });
 
   let c = ApolloClient.instance;
 
@@ -83,18 +64,11 @@ let make = (~client) => {
   );
 
   if (state##loading) {
-    Js.log("Loading..............");
     <div>
       {ReasonReact.string("Loading...")}
     </div>
   } else {
-    let todoList = List.mapi((i, t) => {
-      Js.log("======================");
-      Js.log(state##todos);
-      Js.log(i);
-      Js.log(t);
-      Js.log(List.nth(state##todos, i*2));
-      Js.log("======================");
+    let todoList = Array.map((t) => {
       <FeedItem todo={t} key={t##title} />
     }, state##todos);
     let newTodosBanner = {
@@ -113,12 +87,10 @@ let make = (~client) => {
       <div className="todoListWrapper">
         {newTodosBanner}
         <ul>
-          {ReasonReact.array(Array.of_list(todoList))}
+          {ReasonReact.array(todoList)}
         </ul>
         {oldTodosButton}
       </div>
     </React.Fragment>
   }
-
-
 }
