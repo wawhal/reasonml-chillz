@@ -14,7 +14,7 @@ type todoType = {
 type state = {
   .
   "todos": array(todoType),
-  "loading": bool
+  "loading": bool,
 };
 
 type todosGqlResp = { 
@@ -30,7 +30,7 @@ type action =
   | SetTodos(array(todoType));
 
 [@react.component]
-let make = (~client) => {
+let make = (~client, ~latestTodoId) => {
 
   let (state, dispatch) = React.useReducer((_, action) => {
     let SetTodos(todos) = action;
@@ -74,6 +74,27 @@ let make = (~client) => {
     |> ignore
   };
 
+  let existingTodoLength = Array.length(state##todos);
+  let latestVisibleId = if (existingTodoLength > 0) { state##todos[0]##id } else { 0 };
+  let shouldShowNewTodosBanner = latestVisibleId < latestTodoId;
+
+  let fetchNewerTodos = () => {
+    let fetchNewerTodosQuery = GraphQLQueries.GetNewPublicTodos.make(~latestVisibleId=latestVisibleId, ());
+    let query = {
+      "query": ApolloClient.gql(. fetchNewerTodosQuery##query),
+      "variables": fetchNewerTodosQuery##variables
+    };
+    let apolloData = c##query(query);
+    apolloData
+    |> Js.Promise.then_(gqlResp => {
+      let resp = toApolloResult(gqlResp);
+      let newTodos = Array.append(resp##data##todos, state##todos);
+      dispatch(SetTodos(newTodos));
+      Js.Promise.resolve();
+    })
+    |> ignore
+  }
+
   React.useEffect0(
     () => {
       fetchPublicTodos();
@@ -89,10 +110,12 @@ let make = (~client) => {
     let todoList = Array.map((t) => {
       <FeedItem todo={t} key={t##title} />
     }, state##todos);
-    let newTodosBanner = {
-      <div className={"loadMoreSection"}>
+    let newTodosBanner = if(shouldShowNewTodosBanner) {
+      <div className={"loadMoreSection"} onClick={_ => fetchNewerTodos()}>
         {ReasonReact.string("New tasks have arrived!")}
       </div>
+    } else {
+      {ReasonReact.null}
     };
 
     let oldTodosButton = {

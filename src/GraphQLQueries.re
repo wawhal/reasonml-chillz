@@ -123,3 +123,29 @@ module GetOlderTodos = [%graphql
     }
   |}
 ];
+
+module NotifyNewPublicTodos = [%graphql
+  {|
+    subscription notifyNewPublicTodos {
+      todos (where: { is_public: { _eq: true}}, limit: 1, order_by: {id: desc }) {
+        id
+      }
+    }
+  |}
+];
+
+module NotifyNewPublicTodosSubscription = ReasonApollo.CreateSubscription(NotifyNewPublicTodos);
+
+module GetNewPublicTodos = [%graphql
+  {|
+    query getNewPublicTodos ($latestVisibleId: Int!) {
+      todos(where: { is_public: { _eq: true}, id: {_gt: $latestVisibleId}}, order_by: { id: desc }) {
+        id
+        title
+        user {
+          name
+        }
+      }
+    }
+  |}
+];
