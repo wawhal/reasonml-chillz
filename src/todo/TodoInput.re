@@ -19,7 +19,7 @@ let make = (~isPublic: bool) => {
              ReactEvent.Form.preventDefault(event);
              mutate(
                ~variables=insertTodoMutation##variables,
-               ~refetchQueries=[|"getMyTodos"|],
+               ~refetchQueries=(isPublic ? [||] : [|"getMyTodos"|]),
                ()
              )
              |> Js.Promise.then_(data => {

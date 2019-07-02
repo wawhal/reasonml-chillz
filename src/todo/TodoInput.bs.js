@@ -20,7 +20,7 @@ function TodoInput(Props) {
                               className: "formInput",
                               onSubmit: (function ($$event) {
                                   $$event.preventDefault();
-                                  Curry._4(mutate, Caml_option.some(insertTodoMutation.variables), /* array */["getMyTodos"], undefined, /* () */0).then((function (data) {
+                                  Curry._4(mutate, Caml_option.some(insertTodoMutation.variables), isPublic ? /* array */[] : /* array */["getMyTodos"], undefined, /* () */0).then((function (data) {
                                           Curry._1(dispatch, /* HandleTextChange */[""]);
                                           return Promise.resolve(/* () */0);
                                         }));
