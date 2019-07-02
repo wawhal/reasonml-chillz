@@ -3,16 +3,9 @@
 
 var React = require("react");
 var Auth0Js = require("auth0-js");
+var Auth0$ReactHooksTemplate = require("./Auth0.bs.js");
 
-var authOptions = {
-  domain: "graphql-tutorials.auth0.com",
-  clientID: "P38qnFo1lFAQJrzkun--wEzqljVNGcWW",
-  redirectUri: "http://localhost:3000/callback",
-  responseType: "token id_token",
-  scope: "openid"
-};
-
-var authClient = new Auth0Js.WebAuth(authOptions);
+var authClient = new Auth0Js.WebAuth(Auth0$ReactHooksTemplate.options);
 
 function Login(Props) {
   return React.createElement("div", {
@@ -36,7 +29,6 @@ function Login(Props) {
 
 var make = Login;
 
-exports.authOptions = authOptions;
 exports.authClient = authClient;
 exports.make = make;
 /* authClient Not a pure module */

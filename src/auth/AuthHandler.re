@@ -1,17 +1,5 @@
 open Auth0
 
-[@bs.val] external windowOrigin : string = "window.location.origin";
-
-let authOptions = {
-  "domain": "graphql-tutorials.auth0.com",
-  "clientID": "P38qnFo1lFAQJrzkun--wEzqljVNGcWW",
-  "redirectUri": windowOrigin ++ "/callback",
-  "responseType": "token id_token",
-  "scope": "openid"
-};
-
-let authClient = Auth0.createClient(authOptions);
-
 type state = {
   token: option(string)
 };
