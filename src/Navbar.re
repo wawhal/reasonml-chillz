@@ -2,6 +2,7 @@
 let make = () => {
   let logout = (_) => {
     Util.removeSessionFromStorage();
+    ApolloClient.instance##resetStore();
     ReasonReactRouter.push("/login");
   };
   <nav className="m-bottom-0 navbar navbar-default">

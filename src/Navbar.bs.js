@@ -4,10 +4,12 @@
 var React = require("react");
 var ReasonReactRouter = require("reason-react/src/ReasonReactRouter.js");
 var Util$ReactHooksTemplate = require("./auth/Util.bs.js");
+var ApolloClient$ReactHooksTemplate = require("./ApolloClient.bs.js");
 
 function Navbar(Props) {
   var logout = function (param) {
     Util$ReactHooksTemplate.removeSessionFromStorage(/* () */0);
+    ApolloClient$ReactHooksTemplate.instance.resetStore();
     return ReasonReactRouter.push("/login");
   };
   return React.createElement("nav", {

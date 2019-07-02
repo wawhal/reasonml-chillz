@@ -1,3 +1,5 @@
+[@bs.val] external locationReplace : (string) => unit = "window.location.replace";
+
 [@react.component]
 let make = (~urlHash: string) => {
   Js.log(urlHash);
@@ -17,7 +19,8 @@ let make = (~urlHash: string) => {
           let idToken = Js.String.substr(~from=9, auth0Response[1]);
           let expiresIn = Js.String.substr(~from=11, auth0Response[3]);
           Util.saveSessionToStorage(idToken, expiresIn);
-          ReasonReactRouter.push("/");
+          Js.log(locationReplace);
+          locationReplace("/");
           <App />
         }
       }
