@@ -2,7 +2,6 @@
 
 [@react.component]
 let make = (~urlHash: string) => {
-  Js.log(urlHash);
   if (urlHash == "") {
     ReasonReactRouter.push("/login");
     <Login />;
