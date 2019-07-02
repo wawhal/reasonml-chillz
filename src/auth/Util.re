@@ -1,4 +1,6 @@
 let saveSessionToStorage = (token, expiryDuration) => {
+  Js.log(token);
+  Js.log(expiryDuration);
   Dom.Storage.(localStorage |> setItem("@learn.hasura.io:reason-apollo-token", token));
   let expiryTime = (Js.Date.now() /. 1000.0) +. float_of_string(expiryDuration)
     |> string_of_float;
