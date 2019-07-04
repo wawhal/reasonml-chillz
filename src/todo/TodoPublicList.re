@@ -26,8 +26,7 @@ type response = {. "data": state};
 
 external toApolloResult : 'a => response = "%identity";
 
-type action = 
-  | SetTodos(array(todoType));
+type action = SetTodos(array(todoType));
 
 [@react.component]
 let make = (~client, ~latestTodoId) => {
@@ -36,8 +35,6 @@ let make = (~client, ~latestTodoId) => {
     let SetTodos(todos) = action;
     { "todos": todos, "loading": false }
   }, { "todos": [||], "loading": true });
-
-  let c = ApolloClient.instance;
 
   let fetchPublicTodos = () => {
     let fetchPublicTodosQuery = GraphQLQueries.GetPublicTodos.make(());
