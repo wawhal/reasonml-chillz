@@ -151,6 +151,17 @@ if (state##loading) {
 }
 ```
 
+Finally, make the UI render the todos from this state instead of `sampleTodos`.
+
+```
+-let todoList = Array.map((t) => {
+      <FeedItem todo={t} key={t##title} />
+    }, sampleTodos);
++let todoList = Array.map((t) => {
+      <FeedItem todo={t} key={t##title} />
+    }, state##todos);
+```
+
 Once this is done, the UI should render the newest public todos.
 
 Also, we will add basic pagination by implementing the `Load older todos` button.
