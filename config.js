@@ -1,6 +1,6 @@
 const config = {
 	"gatsby": {
-		"pathPrefix": "/graphql/reason-react-apollo",
+		"pathPrefix": "/",
 		"siteUrl": "https://learn.hasura.io",
 		"gaTrackingId": "UA-59768903-1"
 	},
