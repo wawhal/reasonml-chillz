@@ -1,12 +1,4 @@
-let authOptions = {
-  "domain": "graphql-tutorials.auth0.com",
-  "clientID": "P38qnFo1lFAQJrzkun--wEzqljVNGcWW",
-  "redirectUri": "http://localhost:3000/callback",
-  "responseType": "token id_token",
-  "scope": "openid"
-};
-
-let authClient = Auth0.createClient(authOptions);
+let authClient = Auth0.createClient(Auth0.options);
 
 [@react.component]
 let make = () => {

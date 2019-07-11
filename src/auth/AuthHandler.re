@@ -1,13 +1,3 @@
-let authOptions = {
-  "domain": "graphql-tutorials.auth0.com",
-  "clientID": "P38qnFo1lFAQJrzkun--wEzqljVNGcWW",
-  "redirectUri": "http://localhost:3000/callback",
-  "responseType": "token id_token",
-  "scope": "openid"
-};
-
-let authClient = Auth0.createClient(authOptions);
-
 type state = {
   token: option(string)
 };
