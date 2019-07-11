@@ -1,19 +1,16 @@
 // sample data
-open TodoTypes;
-let sampleTodos : array(todo) = [|
+let sampleTodos = [|
   {
-    id: 1,
-    title: "This is private todo 1",
-    is_completed: true,
-    is_public: false,
-    user: None,
+    "id": 1,
+    "title": "This is private todo 1",
+    "is_completed": true,
+    "is_public": false
   },
   {
-    id: 2,
-    title: "This is private todo 2",
-    is_completed: false,
-    is_public: false,
-    user: None
+    "id": 2,
+    "title": "This is private todo 2",
+    "is_completed": false,
+    "is_public": false
   }
 |];
 
@@ -41,7 +38,7 @@ let make = () => {
     sampleTodos
     |> Array.to_list
     |> List.filter((todo) =>
-      switch(todo.is_completed) {
+      switch(todo##is_completed) {
         | true => state.filter === "all" || state.filter === "complete"
         | false => state.filter === "all" || state.filter === "active"
       })
