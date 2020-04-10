@@ -19,7 +19,7 @@
     "@glennsl/bs-json": "^3.0.0",
     "apollo-boost": "^0.4.0",
     "apollo-link-ws": "^1.0.17",
-    "auth0-js": "^9.10.4",
+    "auth0-js": "^9.13.2",
     "bs-react-bootstrap": "^0.1.0",
     "graphql": "^14.3.1",
     "react": "^16.8.1",
